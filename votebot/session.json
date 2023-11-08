@@ -1,0 +1,21 @@
+{
+  "sessions": [
+    {
+      "id": "466439009:466439009",
+      "data": {
+        "__scenes": {
+          "current": "contact",
+          "state": {},
+          "cursor": 2
+        },
+        "isRegistration": false,
+        "__language_code": "ru",
+        "ip": "46.211.144.72",
+        "id": 466439009,
+        "verificationCode": 82827,
+        "phone": "380678656299",
+        "sendCodeTime": 1699453437383
+      }
+    }
+  ]
+}

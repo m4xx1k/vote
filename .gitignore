@@ -1,0 +1,47 @@
+_backup
+vote0admin
+voteadmin-next
+.idea
+
+# voteadmin
+/voteadmin/node_modules
+/voteadmin/.pnp
+/voteadmin/.pnp.js
+/voteadmin/.idea
+/voteadmin/coverage
+/voteadmin/.next/
+/voteadmin/out/
+/voteadmin/build
+/voteadmin/.DS_Store
+/voteadmin/*.pem
+/voteadmin/npm-debug.log*
+/voteadmin/yarn-debug.log*
+/voteadmin/yarn-error.log*
+/voteadmin/.env*.local
+/voteadmin/.vercel
+# votenext
+/votenext/node_modules
+/votenext/.pnp
+/votenext/.pnp.js
+/votenext/.idea
+/votenext/coverage
+/votenext/.next/
+/votenext/out/
+/votenext/build
+/votenext/.DS_Store
+/votenext/*.pem
+/votenext/npm-debug.log*
+/votenext/yarn-debug.log*
+/votenext/yarn-error.log*
+/votenext/.env*.local
+/votenext/.vercel
+
+# votebot
+
+/votebot/node_modules
+/votebot/.idea
+# server
+
+/voteserver/node_modules
+/voteserver/.idea
+/voteserver/photos
