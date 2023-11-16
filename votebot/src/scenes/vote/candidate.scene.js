@@ -18,10 +18,10 @@ scene.enter(async (ctx) => {
                     tg_id: ctx.from.id,
                     nomination: candidate.nomination,
                 })
-                const source = path.join(__dirname,'..', '..', '..', '..', 'voteserver/photos/candidates', candidate.photo)
+                // const source = path.join(__dirname,'..', '..', '..', '..', 'voteserver/photos/candidates', candidate.photo)
                 await ctx.replyWithPhoto({
-                    // source: `http://localhost:5001/${candidate.photo}`,
-                    source
+                    source: `${process.env.BACKEND_API_URL}/${candidate.photo}`,
+                    // source
                 })
                 const inlineButtons = [
                     [Markup.button.callback('Перейти в номинации', 'go2nominations')],
