@@ -1,10 +1,12 @@
 const express = require('express');
 const candidateController = require('../controllers/candidate.controller');
 const multer = require('multer');
+const path = require("path");
 const router = express.Router();
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './photos/candidates');
+        // cb(null, './photos/candidates');
+        cb(null, path.join(__dirname, '../../photos/candidates'));
     },
     filename: function (req, file, cb) {
         cb(null, `${Math.random()}`.split('.')[1] + '.' + file.originalname.split('.').slice(-1));
