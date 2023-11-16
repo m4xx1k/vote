@@ -11,8 +11,19 @@ const app = express();
 const PORT = process.env.PORT || 5000
 
 app.use(express.json())
+const origin = [
+    'http://localhost:3001',
+    'http://localhost:3000',
+    'https://voteip.onrender.com',
+    'https://2v9vxd30-3000.euw.devtunnels.ms',
+    'https://api.repostuz.pp.ua',
+    'https://admin.repostuz.pp.ua',
+    'https://ip.repostuz.pp.ua',
+    'https://tg.repostuz.pp.ua',
+    'https://repostuz.pp.ua'
+]
 app.use(cors({
-    origin: [ 'http://localhost:3001',   'http://localhost:3000',  'https://voteip.onrender.com',   'https://2v9vxd30-3000.euw.devtunnels.ms', 'https://api.repostuz.pp.ua', 'https://ip.repostuz.pp.ua','https://tg.repostuz.pp.ua','https://repostuz.pp.ua']
+    origin
 }))
 app.use(express.static(path.join(__dirname, '..', '/photos/candidates')));
 
