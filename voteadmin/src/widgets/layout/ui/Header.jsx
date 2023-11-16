@@ -24,7 +24,7 @@ const Header = () => {
                         </li>
 
                         <li>
-                            <Link href="#">Contact</Link>
+                            <Link href="/user">Пользователи</Link>
                         </li>
                     </ul>
                 </div>

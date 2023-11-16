@@ -56,13 +56,7 @@ module.exports = new Scenes.WizardScene(
             else
                 await ctx.replyWithHTML(`бля тьі вже зареган_а пхд`)
 
-            const language = await ctx.i18n.getLocale()
-
-                await ctx.replyWithHTML(`ВВійти`, Markup.inlineKeyboard([
-                    [
-                        Markup.button.webApp(`${language} | Web`, `${process.env.WEB}?language=${language}`)]
-                ]))
-            // await ctx.scene.enter('nominations')
+            await ctx.scene.enter('web')
 
         } catch (e) {
             console.log(e)

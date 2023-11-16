@@ -11,7 +11,7 @@ export default function RootLayout({children}) {
         <html lang="en">
         <body>
         <Header/>
-        <div className={'flex flex-col justify-center max-w-4xl mx-auto'}>
+        <div className={'flex flex-col justify-center max-w-6xl mx-auto'}>
             {children}
         </div>
         </body>

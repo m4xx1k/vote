@@ -72,7 +72,29 @@ class candidateService {
         } else return candidates
 
     }
+    async getCandidateWithRating(candidateId) {
+        const candidate = await Candidate.findById(candidateId).lean();
+        if (!candidate) {
+            return null;
+        }
 
+        const votesFor = await Vote.countDocuments({ type: 'for', candidate: candidate._id });
+        const votesAgainst = await Vote.countDocuments({ type: 'against', candidate: candidate._id });
+
+        const C = await this.calculateAverageRating(candidate.nomination);
+        const M = await this.calculateAverageNumberOfVotesForCandidate(candidate.nomination);
+        const V = votesFor;
+        const P = votesFor - votesAgainst;
+
+        const rating = (V * P) / (V + M) + (M * C) / (V + M);
+
+        return {
+            ...candidate,
+            rating,
+            for: votesFor,
+            against: votesAgainst,
+        };
+    }
     async findById(id) {
         const candidate = await Candidate.findById(id).lean();
 

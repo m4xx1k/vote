@@ -6,6 +6,38 @@ const {faker, fakerRU, fakerEN} = require('@faker-js/faker')
 const db = require("../mongo/_connect");
 const voteService = require('../services/vote.service')
 
+function getRandomDate() {
+    const today = new Date();
+    const randomDay = faker.number.int({min: 0, max: 30})
+    const randomHour = faker.number.int({min: 1, max: 24})
+    return new Date(today.getTime() - (randomDay * randomHour * 60 * 60 * 1000));
+}
+
+
+const updateCreatedAt = async () => {
+    console.log(1)
+    try {
+        const users = await User.find({}).lean()
+        console.log(2)
+
+        for (const user of users) {
+            const randomDate = getRandomDate()
+            console.log(randomDate)
+            const updatedUser = await User.findByIdAndUpdate(user._id, {date: randomDate})
+            console.log(new Date(randomDate).getTime() === new Date(updatedUser.date).getTime(), {
+                randomDate,
+                userDate: updatedUser.date
+            })
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
+    console.log('finished')
+}
+updateCreatedAt()
+
+
 const fakeIp = () => `${faker.number.int({min: 20, max: 255})}.${faker.number.int({
     min: 20,
     max: 255
@@ -85,7 +117,7 @@ const feedVotes = async () => {
         const createdUser = await User.create(user)
         const randomCandidateIndex = faker.number.int({min: 0, max: candidates.length - 1})
         const candidate = candidates[randomCandidateIndex]
-        const type = ['for','for', 'against'][faker.number.int({min: 0, max: 2})]
+        const type = ['for', 'for', 'against'][faker.number.int({min: 0, max: 2})]
         const vote = await Vote.create({
             user: createdUser._id, candidate: candidate._id, nomination: nomination._id, type
         })
@@ -102,4 +134,4 @@ const feedVotes = async () => {
     // console.log('finishcalculating of votes ', (finishcalculating - finishVotes) / 1000)
 
 }
-feedVotes()
+

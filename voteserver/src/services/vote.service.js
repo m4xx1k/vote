@@ -1,26 +1,31 @@
 const Vote = require('../mongo/vote.model');
 const Candidate = require('../mongo/candidate.model');
-const mongoose = require('mongoose')
+const User = require('../mongo/user.model');
 
 class voteService {
-    async check({tg_id, nomination, candidate}) {
-        const req = {tg_id}
+    async check({tg_id, candidate}) {
+        const user = await User.findOne({tg_id}, '_id').lean()
+        const req = {user: user._id}
 
-        if (nomination) {
-            req.nomination = nomination
-            if (candidate) req.candidate = candidate
-        }
-        return await Vote.find(req);
+        if (candidate) req.candidate = candidate
+        const result = await Vote.find(req, 'type').lean();
+        console.log({result})
+        return result
 
 
     }
 
-    async vote({tg_id, nomination, candidate}) {
-        const req = {tg_id, nomination, candidate}
+    async vote({tg_id, nomination, candidate, type}) {
+        const user = await User.findOne({tg_id}, '_id').lean()
+        const req = {user: user._id, candidate, type}
         const vote = await Vote.findOne(req)
-        if (!vote)
+        if (!vote) {
+            if (!nomination) {
+                const candidateForVote = await Candidate.findById(candidate, 'nomination').lean()
+                req.nomination = candidateForVote.nomination
+            }
             return Vote.create(req);
-        else
+        } else
             return vote
     }
 

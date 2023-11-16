@@ -37,6 +37,17 @@ class candidateController {
             next(e);
         }
     }
+    async getCandidateWithRating(req, res, next) {
+        try {
+            const {id} = req.params
+            const candidate = await candidateService.getCandidateWithRating(id);
+            console.log({candidate})
+            return res.json(candidate);
+        } catch (e) {
+            console.log(e)
+            next(e);
+        }
+    }
 
     async candidateNamesByNomination(req, res, next) {
         try {

@@ -2,8 +2,8 @@ require('dotenv').config()
 const {Telegraf, Scenes, session} = require('telegraf')
 const {I18n} = require("@grammyjs/i18n");
 const startComposer = require('./composer/start.composer')//composers
-// const registrationScene = require('./scenes/registration/registration.scene')
 const nominationsScene = require('./scenes/vote/nominations.scene')//scenes
+const webScene = require('./scenes/web/web.scene')
 const nominationScene = require('./scenes/vote/nomination.scene')
 const candidateScene = require('./scenes/vote/candidate.scene')
 const languageScene = require('./scenes/language/language.scene')
@@ -29,14 +29,14 @@ const main = async () => {
     });
     bot.use(i18n);
 
-    const stage = new Scenes.Stage([languageScene, ipScene, contactScene, candidateScene, nominationScene, nominationsScene])
+    const stage = new Scenes.Stage([languageScene, ipScene, contactScene, candidateScene, nominationScene, nominationsScene,webScene])
 
     bot.use(stage.middleware())
 
     bot.use(startComposer.middleware())
 
     bot.use(previousSceneMiddleware)
-    bot.launch().then(() => console.log(`bot started @${bot.options.username}`))
+    await bot.launch()
 
 }
-main()
+main().then(() => console.log(`bot started`))

@@ -20,6 +20,7 @@ class nominationController {
     async findAll(req, res, next) {
         try {
             const nominations = await nominationService.findAll();
+            console.log(nominations)
             return res.json(nominations);
         } catch (e) {
             next(e);

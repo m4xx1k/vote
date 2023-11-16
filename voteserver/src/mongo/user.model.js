@@ -18,7 +18,8 @@ const schema = new db.Schema({
     },
     phone: {
         type: String, required: true
-    }
+    },
+    date: {type: Date}
 }, {timestamps: true})
 
 module.exports = db.model('User', schema)

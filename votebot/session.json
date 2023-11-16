@@ -4,17 +4,16 @@
       "id": "466439009:466439009",
       "data": {
         "__scenes": {
-          "current": "contact",
-          "state": {},
-          "cursor": 2
+          "current": "web",
+          "state": {}
         },
         "isRegistration": false,
         "__language_code": "ru",
-        "ip": "46.211.144.72",
+        "ip": "178.212.111.74",
         "id": 466439009,
-        "verificationCode": 82827,
-        "phone": "380678656299",
-        "sendCodeTime": 1699453437383
+        "verificationCode": 51292,
+        "phone": "+380678656299",
+        "sendCodeTime": 1700060250671
       }
     }
   ]

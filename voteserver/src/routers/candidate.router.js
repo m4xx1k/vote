@@ -19,6 +19,7 @@ router.post('/', upload.single('photo'), candidateController.create);
 router.get('/', candidateController.findAll);
 router.get('/nomination/:id/names', candidateController.candidateNamesByNomination);
 router.get('/candidatesByNomination/:id', candidateController.candidateByNomination);
+router.get('/rating/:id', candidateController.getCandidateWithRating);
 router.get('/:id', candidateController.findById);
 router.put('/:id', upload.single('photo'), candidateController.update);
 router.delete('/:id', candidateController.delete);

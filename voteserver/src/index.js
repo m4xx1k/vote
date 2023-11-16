@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5001
 
 app.use(express.json())
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:3001', 'https://2v9vxd30-8080.euw.devtunnels.ms/', 'http://localhost:8080', 'http://localhost:3000', 'http://localhost:5174', 'https://admin.goodjoy.uz', 'https://voteip.onrender.com', 'https://votebot.onrender.com', 'https://goodjoy.uz']
+    origin: ['http://localhost:5173', 'http://localhost:3001', 'https://2v9vxd30-8080.euw.devtunnels.ms/', 'http://localhost:8080', 'http://localhost:3000', 'http://localhost:5174', 'https://admin.goodjoy.uz', 'https://voteip.onrender.com', 'https://votebot.onrender.com', 'https://goodjoy.uz', 'https://2v9vxd30-3000.euw.devtunnels.ms']
 }))
 app.use(express.static(path.join(__dirname, '..', '/photos/candidates')));
 
