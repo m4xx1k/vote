@@ -11,7 +11,7 @@ composer.command('start', async (ctx) => {
             ctx.session.isRegistration = true
             await ctx.scene.enter('language')
         } else {
-            await ctx.scene.enter('nominations')
+            await ctx.scene.enter('web')
             // await ctx.scene.enter('nominations')
         }
     } catch (e) {
