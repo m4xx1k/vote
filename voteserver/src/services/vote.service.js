@@ -19,12 +19,20 @@ class voteService {
         const user = await User.findOne({tg_id}, '_id').lean()
         const req = {user: user._id, candidate, type}
         const vote = await Vote.findOne(req)
+        const voteToDelete = await Vote.findOne({user: user._id, candidate, type: type === 'for' ? 'against' : 'for'})
+
+        if (voteToDelete) {
+            await Vote.findByIdAndDelete(voteToDelete._id)
+            console.log({voteToDelete})
+        }
         if (!vote) {
             if (!nomination) {
                 const candidateForVote = await Candidate.findById(candidate, 'nomination').lean()
                 req.nomination = candidateForVote.nomination
             }
-            return Vote.create(req);
+            const result = await Vote.create(req);
+            console.log({result, req})
+            return result
         } else
             return vote
     }

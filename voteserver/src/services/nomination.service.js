@@ -7,7 +7,7 @@ class nominationService {
     }
 
     async findAll() {
-        return await Nomination.find().sort({order: 1});
+        return await Nomination.find({}).sort({order: 1}).lean();
     }
 
     async findById(id) {

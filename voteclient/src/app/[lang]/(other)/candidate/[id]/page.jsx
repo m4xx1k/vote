@@ -19,7 +19,7 @@ const getRatingCircleStroke = (rating) => {
 const active = 'border-2 border-black'
 const Page = ({params: {id, lang}}) => {
     const {user} = useTelegram()
-    const {data: candidate, isLoading, error} = useSWR(id, () => getCandidateWithRating(id))
+    const {data: candidate, isLoading, error, mutate:mutateCandidate} = useSWR(id, () => getCandidateWithRating(id))
     const {data: vote, isLoadingVote, errorVote, mutate} = useSWR('vote', () => findUserVote({
         tg_id: user.id,
         candidate: id
@@ -27,9 +27,13 @@ const Page = ({params: {id, lang}}) => {
 
     const type = vote?.length && vote ? vote[0].type : null
     const strokeDashoffset = getRatingCircleStroke(candidate ? candidate?.rating : 0)
-    const handleVote = async (type) => {
-        await voteForCandidate({type, candidate: id, tg_id: user.id})
-        await mutate()
+    const handleVote = async (voteType) => {
+        if(type!==voteType){
+            await voteForCandidate({type:voteType, candidate: id, tg_id: user.id})
+            await mutateCandidate()
+            await mutate()
+        }
+
     }
     if (isLoading || error || !candidate) return 'wait'
     return (<main className="page">
@@ -38,11 +42,10 @@ const Page = ({params: {id, lang}}) => {
                 <div className="minister__container">
                     <div className="minister__body">
                         <div style={{maxHeight: 192, maxWidth: 192,}} className="minister__image-ibg--contain">
-                            <Image style={{maxHeight: 192, maxWidth: 192, objectFit: 'cover', margin: '0 auto'}}
+                            <Image style={{maxHeight: 192, maxWidth: 192, objectFit: 'cover', margin: '0 auto', borderRadius:'50%'}}
                                    src={photo(candidate.photo)} width={192} height={192} alt=""/>
                         </div>
-                        <h2 className={clsx("minister__maintitle title", 'max-w-sm')}>ID:{JSON.stringify({user})}</h2>
-                        <h1 className="minister__maintitle title">{candidate[lang].name} {JSON.stringify({type})}</h1>
+                        <h2 className={"minister__maintitle title"}>{candidate[lang].name}</h2>
                         <div className="minister__text text">{candidate[lang].description}</div>
                         {/*<div className={'max-w-sm'}>*/}
                         {/*    {JSON.stringify({candidate, error})}*/}
@@ -52,14 +55,19 @@ const Page = ({params: {id, lang}}) => {
                                 <circle cx="47" cy="47" r="47"></circle>
                                 <circle style={{strokeDashoffset}} data-circle-round cx="47" cy="47" r="47"></circle>
                             </svg>
-                            <div style={{fontSize: 16}} className="minister__circle-percentage"
-                                 data-symbol="%">{(candidate?.rating || 0).toFixed(4)}</div>
+                            <div style={{fontSize: 20}} className="minister__circle-percentage"
+                                 data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>
                         </div>
 
                         <div className="minister__info">
                             <div className="minister__title-2">Информация:</div>
                             <div className="minister__text text text_big">
-                                {JSON.stringify({user}, null, 4)}
+                                Экслюзивный рейтинг государственных служащих,
+                                составленный Repost.uz на основе честного и объективного голосования граждан со всех
+                                уголков
+                                Узбекистана.
+
+
                             </div>
                         </div>
 
