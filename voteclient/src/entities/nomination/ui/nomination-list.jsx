@@ -6,7 +6,7 @@ import Link from "next/link";
 const NominationList = ({lang}) => {
     const {data:nominations, isLoading,error}= useSWR('nominations',fetchAllNominations)
     console.log({data:nominations, isLoading,error})
-    if(!nominations || isLoading || error) return 'opaaa'
+    if(!nominations || isLoading || error) return null
     return (
         <div className="category__items">
             {

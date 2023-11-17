@@ -25,7 +25,8 @@ const Page = ({params: {id, lang}}) => {
     }, [lang])
 
     const type = vote?.length && vote ? vote[0].type : null
-    const strokeDashoffset = getRatingCircleStroke(candidate ? candidate?.rating : 0)
+    const strokeDashoffsetFor = getRatingCircleStroke(candidate ? candidate?.rating : 0)
+    const strokeDashoffsetAgainst = getRatingCircleStroke(candidate ? 100 - candidate?.rating : 0)
     const handleVote = async (voteType) => {
         if (type !== voteType) {
             setIsVoting(true)
@@ -62,15 +63,39 @@ const Page = ({params: {id, lang}}) => {
                         {/*<div className={'max-w-sm'}>*/}
                         {/*    {JSON.stringify({candidate, error})}*/}
                         {/*</div>*/}
-                        <div data-circle className="minister__circle">
-                            <svg>
-                                <circle cx="47" cy="47" r="47"></circle>
-                                <circle style={{strokeDashoffset}} data-circle-round cx="47" cy="47" r="47"></circle>
-                            </svg>
-                            <div style={{fontSize: 20}} className="minister__circle-percentage"
-                                 data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>
+                        {/*<div data-circle className="minister__circle">*/}
+                        {/*    <svg>*/}
+                        {/*        <circle cx="47" cy="47" r="47"></circle>*/}
+                        {/*        <circle style={{strokeDashoffset}} data-circle-round cx="47" cy="47" r="47"></circle>*/}
+                        {/*    </svg>*/}
+                        {/*    <div style={{fontSize: 20}} className="minister__circle-percentage"*/}
+                        {/*         data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>*/}
+                        {/*</div>*/}
+
+
+                        <div className="minister__circles">
+                            <div data-circle className="minister__circle minister__circle_green">
+                                <svg>
+                                    <circle cx="47" cy="47" r="47"></circle>
+                                    <circle style={{strokeDashoffset: strokeDashoffsetFor}} data-circle-round cx="47"
+                                            cy="47" r="47"></circle>
+                                </svg>
+                                <div className="minister__circle-percentage"
+                                     data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>
+                            </div>
+                            <div data-circle className="minister__circle minister__circle_red">
+                                <svg>
+                                    <circle cx="47" cy="47" r="47"></circle>
+                                    <circle style={{strokeDashoffset: strokeDashoffsetAgainst}} data-circle-round
+                                            cx="47" cy="47" r="47"></circle>
+                                </svg>
+                                <div className="minister__circle-percentage"
+                                     data-symbol="%">{(candidate?.rating ? 100 - candidate.rating : 0).toFixed(0)}</div>
+                            </div>
                         </div>
-                        <div className="minister__title-2">Проголосовали нейтрально:</div>
+
+
+                        <div className="minister__title-2">{content.vote.neutral_title}</div>
                         <div className="minister__progres progres" data-progres={neutral}>
                             <div className="progres__bar">
                             <span style={{width: `${neutral}%`}} data-progres-line className="progres__line"><span
