@@ -103,6 +103,7 @@ const Page = ({params: {id, lang}}) => {
                                     className={clsx("radio__label radio__label_dislike _icon-dislike", type === 'against' && active)}>
                                 {content.vote.against}
                             </button>
+                            {type}
                         </div>
                     </div>
                 </div>
