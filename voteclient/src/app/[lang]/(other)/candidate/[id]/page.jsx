@@ -97,13 +97,14 @@ const Page = ({params: {id, lang}}) => {
                                 {content.vote.for}
                             </button>
                             <button onClick={() => handleVote('neutral')}
-                                    className={clsx("radio__label", type === 'neutral' && active)}>{content.vote.neutral}</button>
+                                    className={clsx("radio__label", type === 'neutral' && active)}>
+                                {content.vote.neutral}
+                            </button>
                             <button style={type === 'against' ? {border: '2px solid black'} : {}}
                                     onClick={() => handleVote('against')}
                                     className={clsx("radio__label radio__label_dislike _icon-dislike", type === 'against' && active)}>
                                 {content.vote.against}
                             </button>
-                            {type}
                         </div>
                     </div>
                 </div>
