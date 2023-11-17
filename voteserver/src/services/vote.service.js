@@ -1,40 +1,52 @@
 const Vote = require('../mongo/vote.model');
+const VoteNeutral = require('../mongo/vote-neutral.model');
 const Candidate = require('../mongo/candidate.model');
 const User = require('../mongo/user.model');
 
 class voteService {
     async check({tg_id, candidate}) {
+        let result
         const user = await User.findOne({tg_id}, '_id').lean()
         const req = {user: user._id}
 
         if (candidate) req.candidate = candidate
-        const result = await Vote.find(req, 'type').lean();
-        console.log({result})
+        result = await Vote.find(req, 'type').lean();
+        if(result?.length) {
+            console.log(1,{result})
+            return result
+        }else{
+            result = await VoteNeutral.findOne(req)
+            console.log(2,{result})
+            if(result) return [{type:'neutral'}]
+        }
         return result
 
 
     }
 
     async vote({tg_id, nomination, candidate, type}) {
+
         const user = await User.findOne({tg_id}, '_id').lean()
         const req = {user: user._id, candidate, type}
-        const vote = await Vote.findOne(req)
-        const voteToDelete = await Vote.findOne({user: user._id, candidate, type: type === 'for' ? 'against' : 'for'})
-
-        if (voteToDelete) {
-            await Vote.findByIdAndDelete(voteToDelete._id)
-            console.log({voteToDelete})
+        if (!nomination) {
+            const candidateForVote = await Candidate.findById(candidate, 'nomination').lean()
+            req.nomination = candidateForVote.nomination
         }
-        if (!vote) {
-            if (!nomination) {
-                const candidateForVote = await Candidate.findById(candidate, 'nomination').lean()
-                req.nomination = candidateForVote.nomination
-            }
+        const vote = await Vote.findOne(req)
+        const voteToDelete = await Vote.findOneAndDelete({
+            user: user._id,
+            candidate,
+            type: type === 'for' ? 'against' : 'for'
+        })
+        const neutralVoteToDelete = await VoteNeutral.findOneAndDelete({user: user._id, candidate})
+
+        if (!vote && type !== 'neutral') {
             const result = await Vote.create(req);
             console.log({result, req})
             return result
-        } else
-            return vote
+        } else if (type === 'neutral') {
+            return await VoteNeutral.create(req)
+        } else return vote
     }
 
     async calculateCandidateRatings(nominationId) {
