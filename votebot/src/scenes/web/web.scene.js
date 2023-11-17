@@ -7,9 +7,9 @@ scene.enter(async (ctx) => {
 
         try {
             const locale = await ctx.i18n.getLocale()
-            await ctx.replyWithHTML(`ВВійти`, Markup.inlineKeyboard([
+            await ctx.replyWithHTML(ctx.t('vote'), Markup.inlineKeyboard([
                 [
-                    Markup.button.webApp(`${locale} | Web`, `${process.env.WEB}/${locale}`)]
+                    Markup.button.webApp(`${locale.toUpperCase()} | Web`, `${process.env.WEB}/${locale}`)]
             ]))
         } catch (e) {
             console.log(e)

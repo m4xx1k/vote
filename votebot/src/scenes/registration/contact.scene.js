@@ -6,8 +6,8 @@ const {generateVerificationCode, sendVerificationCode} = require("../../utils");
 module.exports = new Scenes.WizardScene(
     'contact',
     async (ctx) => {
-        await ctx.replyWithHTML('📞 Поделитесь контактом для верификации',
-            Markup.keyboard([Markup.button.contactRequest('Отправить 📞')]).oneTime()
+        await ctx.replyWithHTML(ctx.t('share_contact_text'),
+            Markup.keyboard([Markup.button.contactRequest(ctx.t('share_contact_button'))]).oneTime()
         )
         return ctx.wizard.next()
     },
@@ -25,7 +25,7 @@ module.exports = new Scenes.WizardScene(
             ctx.session.sendCodeTime = new Date().getTime()
 
             await sendVerificationCode(phone_number, verificationCode, ctx)
-            await ctx.reply(`✅Код верификации отправлен. После получения отправьте его мне. (${verificationCode})`,)
+            await ctx.reply(ctx.t('code_sent_text', {verificationCode}))
             return ctx.wizard.next()
         } catch (e) {
             console.log(e)
@@ -40,10 +40,10 @@ module.exports = new Scenes.WizardScene(
 
             if (!isCorrect) {
                 if (now - sendCodeTime < 60_000) {
-                    await ctx.replyWithHTML(`❌Код неверный попробуйте еще раз`)
+                    await ctx.replyWithHTML(ctx.t('code_uncorrect'))
                     return
                 } else {
-                    await ctx.replyWithHTML(`❌ Сейчас отправим новый пароль`)
+                    await ctx.replyWithHTML(ctx.t('code_resent'))
                     return ctx.wizard.back()
                 }
             }
