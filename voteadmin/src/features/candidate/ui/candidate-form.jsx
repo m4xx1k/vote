@@ -53,10 +53,23 @@ const CandidateForm = ({type = 'create', candidate}) => {
 
                     <div>
                         <label htmlFor="category"
-                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Номинация</label>
+                               className="block mb-2 text-sm font-medium">Номинация</label>
                         <Select selectProps={{...register('nomination')}}
                                 items={nominations.map(nomination => ({...nomination, name: nomination.ru.name}))}/>
                     </div>
+
+                    <TextField inputProps={{...register('ru.description', {required: true, min: 0})}}
+                               error={errors['ru.description']}
+                               label='Описание кандидата на русском'
+                               placeholder='...'/>
+
+                    <TextField inputProps={{...register('uz.description', {required: true, min: 0})}}
+                               error={errors['uz.description']}
+                               label='Описание кандидата на узбекском'
+                               placeholder='...'/>
+
+
+
 
                     <ImageUpload dirtyFields={dirtyFields} type={type} getValues={getValues} control={control}/>
 
