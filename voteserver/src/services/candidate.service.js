@@ -126,7 +126,7 @@ class candidateService {
                 if (err) console.error("Error deleting file:", err);
             });
             return await Candidate.findByIdAndUpdate(id, {...data, photo}, {new: true});
-        } else if (!!name) {
+        } else if (!!data) {
             return await Candidate.findByIdAndUpdate(id, data, {new: true});
         } else if (!!photo) {
             const oldImagePath = path.join(__dirname, '..', candidate.photo);
