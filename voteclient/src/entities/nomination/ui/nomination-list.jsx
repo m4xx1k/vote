@@ -11,7 +11,7 @@ const NominationList = ({lang}) => {
         <div className="category__items">
             {
                 nominations.map(nomination => (
-                    <Link key={nomination._id} href={`/${lang}/nominations/${nomination._id}`}
+                    <Link key={nomination._id} href={`/${lang}/nominations/${nomination._id}?nomination=${nomination[lang].name.replaceAll(' ','_')}`}
                           className="category__item">
                         <p>{nomination[lang].name}</p>
                         {/*<p>{JSON.stringify({lang, nomination})}</p>*/}

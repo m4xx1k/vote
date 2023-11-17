@@ -4,6 +4,21 @@
       "title": "Odamlar reytingi",
       "description": "O‘zbekistonning barcha burchaklaridan kelgan fuqarolarning halol va xolis ovozi asosida Repost.uz tomonidan tuzilgan davlat xizmatchilarining eksklyuziv reytingi.",
       "button": "Ovoz berish"
+    },
+    "nomination": {
+      "title": "Kategoriyalar",
+      "banner__text": "Muayyan nomzodga ovoz berish orqali siz uning ishiga baho bera olasiz va uning lavozimidagi faoliyatidan qoniqish hosil qilasiz!"
+    },
+    "candidate": {
+      "info_title": "Ma `lumot",
+      "info_text": "O‘zbekistonning barcha burchaklaridan kelgan fuqarolarning halol va xolis ovozi asosida Repost.uz tomonidan tuzilgan davlat xizmatchilarining eksklyuziv reytingi.",
+      "vote": {
+        "title": "Ovoz berish",
+        "for": "Orqada",
+        "neutral": "Neytral",
+        "against": "Qarshi"
+      }
     }
+
   }
 }

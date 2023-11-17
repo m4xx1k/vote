@@ -7,8 +7,8 @@ import Link from "next/link";
 export default async function Home({params: {lang}}) {
     const {page: {main}} = await getDictionary(lang)
     const changeLanguage = {
-        'ru': '/uz',
-        'uz': '/ru'
+        'ru': {link:'/uz', text:'Узб'},
+        'uz': {link:'/ru',text:'Рус'}
     }
     return (
         <div className="wrapper">
@@ -26,7 +26,7 @@ export default async function Home({params: {lang}}) {
                                 </p>
                             </div>
                             <Link href={`/${lang}/nominations`} className={'hero__link button'}>{main.button}</Link>
-                            <Link href={changeLanguage[lang]} className="hero__language">Рус</Link>
+                            <Link href={changeLanguage[lang].link} className="hero__language">{changeLanguage[lang].text}</Link>
                         </div>
                     </div>
                     <div className="hero__backgroung-ibg">
