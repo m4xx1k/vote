@@ -34,7 +34,7 @@ const Page = ({params: {id, lang}}) => {
             await mutate()
         }
     }
-
+    const neutral = candidate?.neutral ? candidate.neutral.toFixed(0) : 0
     if (isLoading || error || !candidate || !content) return null
 
     if (isVoting) return <Voted setIsVoting={setIsVoting}/>
@@ -70,7 +70,17 @@ const Page = ({params: {id, lang}}) => {
                             <div style={{fontSize: 20}} className="minister__circle-percentage"
                                  data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>
                         </div>
-
+                        <div className="minister__title-2">Проголосовали нейтрально:</div>
+                        <div className="minister__progres progres" data-progres={neutral}>
+                            <div className="progres__bar">
+                            <span style={{width: `${neutral}%`}} data-progres-line className="progres__line"><span
+                                className="progres__text">{neutral}</span></span>
+                            </div>
+                            <div className="progres__bottom">
+                                <span>0</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
                         <div className="minister__info">
                             <div className="minister__title-2">{content.info_title}:</div>
                             <div className="minister__text text text_big">
@@ -86,7 +96,8 @@ const Page = ({params: {id, lang}}) => {
                                     className={clsx("radio__label radio__label_like _icon-like", type === 'for' && active)}>
                                 {content.vote.for}
                             </button>
-                            <button className="radio__label">{content.vote.neutral}</button>
+                            <button onClick={() => handleVote('neutral')}
+                                    className={clsx("radio__label", type === 'neutral' && active)}>{content.vote.neutral}</button>
                             <button style={type === 'against' ? {border: '2px solid black'} : {}}
                                     onClick={() => handleVote('against')}
                                     className={clsx("radio__label radio__label_dislike _icon-dislike", type === 'against' && active)}>
