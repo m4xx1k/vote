@@ -13,7 +13,7 @@ share_contact_text =
 share_contact_button =
     Yuborish 📞
 code_sent_text =
-    ✅ Tasdiqlash kodi yuborildi. Qabul qilingandan so'ng, uni menga yuboring. (${verificationCode})
+    ✅ Tasdiqlash kodi yuborildi. Qabul qilingandan so'ng, uni menga yuboring
 code_uncorrect =
     ❌ Kod noto'g'ri, qayta urinib ko'ring
 code_resent =
