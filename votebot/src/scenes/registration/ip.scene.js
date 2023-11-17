@@ -7,13 +7,8 @@ scene.enter(async (ctx) => {
 
         try {
             const locale = await ctx.i18n.getLocale()
-            if (locale === 'uz') {
-                await ctx.reply(ctx.t("lang_selected"),
-                    Markup.keyboard([Markup.button.webApp("Я не робот", `${WEB_APP_URL}?lang=uz&id=${ctx.from.id}`)]).resize().oneTime());
-            } else {
-                await ctx.reply(ctx.t("lang_selected"),
-                    Markup.keyboard([Markup.button.webApp("Я не робот", `${WEB_APP_URL}?lang=ru&id=${ctx.from.id}`)]).resize().oneTime());
-            }
+            await ctx.reply(ctx.t("lang_selected"),
+                Markup.keyboard([Markup.button.webApp(ctx.t('robot'), `${WEB_APP_URL}?lang=${locale}&id=${ctx.from.id}`)]).resize().oneTime());
 
 
         } catch (e) {

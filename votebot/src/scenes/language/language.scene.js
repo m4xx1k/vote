@@ -6,7 +6,7 @@ const scene = new BaseScene("language");
 scene.enter(async (ctx) => {
         try {
             const {isRegistration} = ctx.session
-            const text = isRegistration ? ctx.t('welcome', {...ctx.from}) : `Вьіберите язьік`
+            const text = isRegistration ? ctx.t('welcome', {...ctx.from}) : ctx.t('lang_choose')
             await ctx.replyWithHTML(text,
                 {
                     ...Markup.inlineKeyboard(

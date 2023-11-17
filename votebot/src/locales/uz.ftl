@@ -1,4 +1,8 @@
 welcome =
-    👋 Привeт, <b>{ $first_name }</b>!
+    👋Sizga qulaylik uchun tilni tanlang
 lang_selected =
-    Вьі вьібрали узб язьік
+    Siz rus tilini tanladingiz
+lang_choose =
+    Til tanlang
+robot =
+    Men robot emasman

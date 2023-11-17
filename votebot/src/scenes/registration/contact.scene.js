@@ -40,10 +40,10 @@ module.exports = new Scenes.WizardScene(
 
             if (!isCorrect) {
                 if (now - sendCodeTime < 60_000) {
-                    await ctx.replyWithHTML(`❌ Код неверен спробуйте ще раз`)
+                    await ctx.replyWithHTML(`❌Код неверный попробуйте еще раз`)
                     return
                 } else {
-                    await ctx.replyWithHTML(`❌ щяс відправим новий пароль`)
+                    await ctx.replyWithHTML(`❌ Сейчас отправим новый пароль`)
                     return ctx.wizard.back()
                 }
             }
@@ -51,10 +51,10 @@ module.exports = new Scenes.WizardScene(
                 ip, id, phone, username: ctx.from?.username || ''
             })
 
-            if (user)
-                await ctx.replyWithHTML(`🎉\nВот твой профиль в базе данных:\n\n${JSON.stringify(user, null, 4)}`)
-            else
-                await ctx.replyWithHTML(`бля тьі вже зареган_а пхд`)
+            // if (user)
+            //     await ctx.replyWithHTML(`🎉\nВот твой профиль в базе данных:\n\n${JSON.stringify(user, null, 4)}`)
+            // else
+            //     await ctx.replyWithHTML(`бля тьі вже зареган_а пхд`)
 
             await ctx.scene.enter('web')
 
