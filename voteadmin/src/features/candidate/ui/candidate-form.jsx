@@ -45,18 +45,8 @@ const CandidateForm = ({type = 'create', candidate}) => {
                     <TextField inputProps={{...register('uz.name', {required: true})}} error={errors?.uz?.name}
                                label='Название на узбекском'
                                type='text' placeholder='...'/>
-                    <TextField inputProps={{...register('order', {required: true, min: 0})}} error={errors['order']}
-                               label='Порядок'
-                               type='number'
-                               placeholder='...'/>
 
 
-                    <div>
-                        <label htmlFor="category"
-                               className="block mb-2 text-sm font-medium">Номинация</label>
-                        <Select selectProps={{...register('nomination')}}
-                                items={nominations.map(nomination => ({...nomination, name: nomination.ru.name}))}/>
-                    </div>
 
                     <TextField inputProps={{...register('ru.description', {required: true, min: 0})}}
                                error={errors['ru.description']}
@@ -67,8 +57,13 @@ const CandidateForm = ({type = 'create', candidate}) => {
                                error={errors['uz.description']}
                                label='Описание кандидата на узбекском'
                                placeholder='...'/>
-
-
+                    <div></div>
+                    <div>
+                        <label htmlFor="category"
+                               className="block mb-2 text-sm font-medium">Номинация</label>
+                        <Select selectProps={{...register('nomination')}}
+                                items={nominations.map(nomination => ({...nomination, name: nomination.ru.name}))}/>
+                    </div>
 
 
                     <ImageUpload dirtyFields={dirtyFields} type={type} getValues={getValues} control={control}/>
@@ -76,7 +71,7 @@ const CandidateForm = ({type = 'create', candidate}) => {
                 </div>
                 <button type="submit"
                         className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                    Создать
+                    {{create:'Создать', update:'Сохранить'}[type]}
                 </button>
             </form>
 

@@ -3,6 +3,7 @@ import TextField from '@/shared/ui/TextField'
 import {useForm} from "react-hook-form";
 import {createNomination, deleteNomination, updateNomination} from "@/shared/api/nominations.api";
 import {useSWRConfig} from "swr";
+import Link from "next/link";
 
 const required = 'обязательное поле'
 const NominationForm = ({type = 'create', nomination}) => {
@@ -45,10 +46,17 @@ const NominationForm = ({type = 'create', nomination}) => {
                     </button>
                     {
                         type === 'update' &&
-                        <button onClick={remove} type={'button'}
-                                className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800">
-                            Удалить
-                        </button>
+                        <div className={'flex justify-between w-full'}>
+                            <button onClick={remove} type={'button'}
+                                    className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800">
+                                Удалить
+                            </button>
+
+                            <Link
+                                className={'inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800'}
+                                href={`/candidate/list/${nomination._id}`}>Кандидаты</Link>
+                        </div>
+
                     }
                 </div>
 

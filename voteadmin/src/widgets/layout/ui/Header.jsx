@@ -6,21 +6,17 @@ const Header = () => {
     return (
         <nav className="bg-blue-600">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <a href="#" className="flex items-center">
-                    <Image height={32} width={200} src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Logo"/>
+                <Link href="/" className="flex items-center">
                     <span
                         className="self-center text-2xl font-semibold whitespace-nowrap">Admin</span>
-                </a>
+                </Link>
 
                 <div className="" id="navbar-dropdown">
                     <ul className="text-white flex items-center gap-4">
 
-                        <li>
-                            <Dropdown {...dropdownNominationData}/>
-                        </li>
 
                         <li>
-                            <Dropdown {...dropdownCandidateData}/>
+                            <Link href="/">Голосование</Link>
                         </li>
 
                         <li>

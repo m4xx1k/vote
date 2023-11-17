@@ -51,13 +51,21 @@ const Page = () => {
             <div className={'w-full'}>
                 <h2 className={'text-bold text-xl'}>Найдено {users?.length} пользователей</h2>
 
-                <ul className={'w-full flex flex-col gap-2 overflow-y-scroll h-[calc(100vh-120px)] overflow-x-hidden'}>
-                    {(users || []).map(user => <li className={'bg-gray-200 w-full p-4 mx-1'} key={user._id}>
+                <ul className={'w-full flex flex-col gap-2 overflow-y-scroll h-[calc(100vh-120px)] overflow-x-hidden px-4'}>
+                    {(users || []).map(user => <li className={'bg-gray-100 w-full p-4 mx-1'} key={user._id}>
                     <div className={'flex items-center gap-2'}>
-                        <div>
+                        <div className={'w-64'}>
                             Telegram ID: <span className={'text-lg text-blue-400'}>{user.tg_id}</span>
                         </div>
-                        <div>
+                        <div className={'w-64'}>
+                            IP: <span className={'text-lg text-blue-400'}>{user.ip}</span>
+                        </div>
+
+                    </div>
+                        <div className={'flex items-center gap-2'}>
+                        <div className={'w-64'}>
+                            Телефон: <span className={'text-lg text-blue-400'}>{user.phone}</span>
+                        </div><div className={'w-64'}>
                             Username: <span className={'text-lg text-blue-400'}>{user.username}</span>
                         </div>
                     </div>
