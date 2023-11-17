@@ -19,12 +19,12 @@ class userService {
     async findUsersInRange({startDate, endDate}) {
         const req = {}
         if (startDate) {
-            req.date = {}
-            req.date.$gte = new Date(startDate).setHours(0, 0, 0, 0)
+            req.createdAt = {}
+            req.createdAt.$gte = new Date(startDate).setHours(0, 0, 0, 0)
         }
         if (endDate) {
-            if (!req.date) req.date = {}
-            req.date.$lte = new Date(endDate).setHours(23, 59, 59, 999)
+            if (!req.createdAt) req.createdAt = {}
+            req.createdAt.$lte = new Date(endDate).setHours(23, 59, 59, 999)
         }
         console.log({req})
         const users = await User.find(req);
