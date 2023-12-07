@@ -1,4 +1,5 @@
 const User = require('../mongo/user.model')
+const axios = require("axios");
 
 class userService {
     async create({ip, tg_id, username, phone}) {
@@ -30,6 +31,25 @@ class userService {
         const users = await User.find(req);
 
         return users;
+    }
+
+    async getAndSaveSmsToken() {
+        const data = {
+            email: "indexpr.agency@gmail.com",
+            password: "wablie1gKYJwEczR8YdeRgRcHVXhnECj2KS1vIOP"
+        }
+        const config = {
+
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://notify.eskiz.uz/api/auth/login',
+            data
+        };
+        const token =  await axios(config)
+    }
+
+    async sendSms({}) {
+
     }
 
     async sendMessage({text, recipient}) {
