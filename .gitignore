@@ -45,3 +45,6 @@ voteadmin-next
 /voteserver/node_modules
 /voteserver/.idea
 /voteserver/photos
+/voteserver/.env
+/voteserver/src/config.js
+voteserver/src/config.js
