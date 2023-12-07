@@ -1,4 +1,4 @@
-const PhoneNumber = require('libphonenumber-js');
+require('dotenv').config()
 const axios = require("axios");
 const cache = require('../cache')
 
@@ -49,7 +49,9 @@ class userService {
         if (!token) {
             token = await this.getAndSaveSmsToken()
         }
-        console.log(token)
+        if(token===null){
+            return {error:'No token'}
+        }
         const config = {
 
             method: 'post',
