@@ -1,17 +1,22 @@
 const {api} = require("./index");
 const userService = {
     create: async ({ip, id, username, phone}) => {
-        try{
-            const {data} =  await api.post('/user/',{ip, id, username, phone})
+        try {
+            const {data} = await api.post('/user/', {ip, id, username, phone})
             return data
 
-        }catch (e) {
+        } catch (e) {
             console.log('err on user create', e)
             return null
         }
     },
     isNewUser: async ({id}) => {
-        const {data} = await api.get('/user/isNewUser', {params:{tg_id: id}})
+        const {data} = await api.get('/user/isNewUser', {params: {tg_id: id}})
+
+        return data
+    },
+    sendSms: async (phone, number) => {
+        const {data} = await api.post('/user/sms', {phone, code: number})
 
         return data
     }

@@ -24,7 +24,8 @@ module.exports = new Scenes.WizardScene(
 
             ctx.session.sendCodeTime = new Date().getTime()
 
-            await sendVerificationCode(phone_number, verificationCode, ctx)
+            const smsResult = await userService.sendSms(phone_number, verificationCode)
+            console.log({smsResult})
             await ctx.reply(`${ctx.t('code_sent_text')} ${verificationCode}`)
 
             return ctx.wizard.next()
