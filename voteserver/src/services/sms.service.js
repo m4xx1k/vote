@@ -22,6 +22,7 @@ class userService {
         try {
             const email = process.env.ESKIZ_SMS_EMAIL
             const password = process.env.ESKIZ_SMS_PASSWORD
+            console.log({email, password})
             const config = {
 
                 method: 'post',
@@ -30,6 +31,7 @@ class userService {
                 data: {email, password}
             };
             const response = await axios(config)
+            console.log('token data',JSON.stringify(response.data, null, 4))
             const token = response.data?.data?.token
             if (token) {
                 cache.del('token')
@@ -37,7 +39,7 @@ class userService {
                 return token
             }
         } catch (e) {
-            console.log(e)
+            console.log('getAndSaveSmsToken')
             return null
         }
     }
@@ -47,6 +49,7 @@ class userService {
         if (!token) {
             token = await this.getAndSaveSmsToken()
         }
+        console.log(token)
         const config = {
 
             method: 'post',

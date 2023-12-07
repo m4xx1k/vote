@@ -48,7 +48,7 @@ class userController {
             const response = await smsService.sendSms(data);
             return res.json(response);
         } catch (e) {
-            console.log(1,e)
+            console.log(1,'sendMessage')
             return res.status(500).json(e)
             // next(e);
         }
