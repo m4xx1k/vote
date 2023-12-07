@@ -14,67 +14,70 @@ class candidateService {
         return await Candidate.find().lean();
     }
 
-    async calculateAverageRating(nomination) {
-        const votes = await Vote.find({nomination}).lean();
-        let sum = 0
-        votes.forEach(vote => {
-            if (vote.type === 'for') sum += 1
-            else sum -= 1
-        })
-        return sum / votes.length
-
-    }
-
-    async calculateAverageNumberOfVotesForCandidate(nomination) {
-        const candidates = await Candidate.countDocuments({nomination})
-        const votes = await Vote.find({nomination}).lean()
-        const votesCounts = {}
-        votes.forEach(({candidate, type}) => {
-            if (!votesCounts[candidate]) {
-                votesCounts[candidate] = {for: 0, against: 0}
-            }
-            votesCounts[candidate][type] += 1
-        })
-        let sumOfRatings = 0
-        for (const candidate in votesCounts) {
-            const votes = votesCounts[candidate]
-            sumOfRatings += votes.for - votes.against
-
-        }
-
-        return sumOfRatings / candidates
-    };
-
-    async candidateNamesByNomination({nomination}) {
-        return await Candidate.find({nomination}, 'ru uz').lean()
-    }
 
     async candidateByNomination({id}) {
         const candidates = await Candidate.find({nomination: id}).lean();
         const votesNumber = await Vote.countDocuments({nomination: id})
 
-        const C = await this.calculateAverageRating(id)
-        const M = await this.calculateAverageNumberOfVotesForCandidate(id)
         if (votesNumber) {
             const votedCandidates = []
             for (const candidate of candidates) {
-                const votesFor = await Vote.countDocuments({type: 'for', candidate: candidate._id})
-                const votesAgainst = await Vote.countDocuments({type: 'against', candidate: candidate._id})
-                const V = votesFor
-                const P = votesFor - votesAgainst
+                const votesForCount = await Vote.countDocuments({type: 'for', candidate: candidate._id})
+                const votesAgainstCount = await Vote.countDocuments({type: 'against', candidate: candidate._id})
 
-                const rating = (V * P) / (V + M) + (M * C) / (V + M)
-
+                const rating = votesForCount - votesAgainstCount
+                const votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
+                const votesAgainstPercent = 100 - votesForPercent
                 votedCandidates.push({
                     ...candidate,
                     rating,
-                    for: votesFor,
-                    against: votesAgainst,
+                    for: {
+                        count: votesForCount,
+                        percent: votesForPercent
+                    },
+                    against: {count: votesAgainstCount, percent: votesAgainstPercent},
                 })
             }
-            return votedCandidates
+            const sortedCandidates = votedCandidates.sort((a, b) => b.rating - a.rating)
+            console.log({sortedCandidates})
+            return sortedCandidates
         } else return candidates
 
+    }
+
+    async candidateNamesByNomination({nomination}) {
+        const candidates = await Candidate.find({nomination}, '_id ru uz').lean()
+        const result = []
+        for (const candidate of candidates) {
+            const votesForCount = await Vote.countDocuments({type: 'for', candidate: candidate._id})
+            const votesAgainstCount = await Vote.countDocuments({type: 'against', candidate: candidate._id})
+
+            const rating = votesForCount - votesAgainstCount
+            const votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
+            const votesAgainstPercent = 100 - votesForPercent
+            console.log({
+                for: {
+                    count: votesForCount,
+                    percent: votesForPercent
+                },
+                against: {
+                    count: votesAgainstCount, percent: votesAgainstPercent
+                },
+            })
+            result.push({
+                ...candidate,
+                rating,
+                for: {
+                    count: votesForCount,
+                    percent: votesForPercent
+                },
+                against: {
+                    count: votesAgainstCount, percent: votesAgainstPercent
+                },
+            });
+        }
+
+        return result.toSorted((a, b) => b.rating - a.rating)
     }
 
     async getCandidateWithRating(candidateId) {
@@ -83,27 +86,42 @@ class candidateService {
             return null;
         }
 
-        const votesFor = await Vote.countDocuments({type: 'for', candidate: candidate._id});
-        const votesAgainst = await Vote.countDocuments({type: 'against', candidate: candidate._id});
+        const votesForCount = await Vote.countDocuments({type: 'for', candidate: candidate._id})
+        const votesAgainstCount = await Vote.countDocuments({type: 'against', candidate: candidate._id})
 
-        const C = await this.calculateAverageRating(candidate.nomination);
-        const M = await this.calculateAverageNumberOfVotesForCandidate(candidate.nomination);
-        const V = votesFor;
-        const P = votesFor - votesAgainst;
-
-        const rating = (V * P) / (V + M) + (M * C) / (V + M);
+        const rating = votesForCount - votesAgainstCount
+        let votesForPercent = 0
+        let votesAgainstPercent = 0
+        if(votesForCount || votesAgainstCount) {
+            votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
+            votesAgainstPercent = 100 - votesForPercent
+        }
         const neutralVotesInNomination = await VoteNeutral.countDocuments({nomination: candidate.nomination})
         const neutralVotesForCandidate = await VoteNeutral.countDocuments({candidate: candidateId})
         let neutral = 0
         if (neutralVotesInNomination !== 0 && !Number.isNaN(neutralVotesForCandidate)) {
             neutral = (neutralVotesForCandidate / neutralVotesInNomination) * 100
         }
+        console.log({
+            for: {
+                count: votesForCount,
+                percent: votesForPercent
+            },
+            against: {
+                count: votesAgainstCount, percent: votesAgainstPercent
+            },
+        })
         return {
             ...candidate,
             rating,
-            for: votesFor,
-            against: votesAgainst,
-            neutral
+            neutral,
+            for: {
+                count: votesForCount,
+                percent: votesForPercent
+            },
+            against: {
+                count: votesAgainstCount, percent: votesAgainstPercent
+            },
         };
     }
 

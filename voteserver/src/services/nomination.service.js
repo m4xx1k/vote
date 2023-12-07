@@ -24,27 +24,6 @@ class nominationService {
         return await Nomination.findByIdAndDelete(id);
     }
 
-    async updateOrder0({id, sourceOrder, destinationOrder}) {
-        const requestForNominationToUpdate = {
-            order: {
-                $lte: destinationOrder > sourceOrder ? destinationOrder : sourceOrder,
-                $gte: destinationOrder > sourceOrder ? sourceOrder : destinationOrder
-            }
-        }
-        const nominationsToUpdate = await Nomination.find(requestForNominationToUpdate)
-
-        await Nomination.findByIdAndUpdate(id, {order: destinationOrder + 999_999})//fakeUpdatedNomination to avoid duplicates
-        for (const nomination of nominationsToUpdate) {
-
-            await Nomination.findByIdAndUpdate(nomination._id,
-                {
-                    order: destinationOrder > sourceOrder ? nomination.order - 1 : nomination.order + 1
-                }
-            );
-        }
-        const updatedNomination = await Nomination.findByIdAndUpdate(id, {order: destinationOrder})
-        return {is: !!updatedNomination, updatedNomination}
-    }
 
     async updateOrder({ id, sourceOrder, destinationOrder }) {
         const session = await Nomination.startSession();

@@ -1,9 +1,10 @@
 const ApiError = require('../errors/api.error');
 const userService = require('../services/user.service')
+
 class userController {
     async create(req, res, next) {
         try {
-            const {ip, id:tg_id, username, phone} = req.body;
+            const {ip, id: tg_id, username, phone} = req.body;
 
             if (!tg_id) {
                 return next(ApiError.badRequest(''));
@@ -19,12 +20,13 @@ class userController {
     async isNewUser(req, res, next) {
         try {
             const {tg_id} = req.query
-            const users = await userService.isNewUser({ tg_id});
+            const users = await userService.isNewUser({tg_id});
             return res.json(users);
         } catch (e) {
             next(e);
         }
     }
+
     async findUsersInRange(req, res, next) {
 
         try {
@@ -34,6 +36,20 @@ class userController {
             return res.json(users);
         } catch (e) {
             next(e);
+        }
+    }
+
+
+    async sendMessage(req, res, next) {
+
+        try {
+            const data = req.body
+            const response = await userService.sendMessage(data);
+            return res.json(response);
+        } catch (e) {
+            console.log(1,{...e})
+            return res.status(500).json(e)
+            // next(e);
         }
     }
 
