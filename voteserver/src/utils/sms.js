@@ -1,5 +1,5 @@
 const axios = require('axios');
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDM5NjAwNDEsImlhdCI6MTcwMTM2ODA0MSwicm9sZSI6InRlc3QiLCJzdWIiOiI1ODE4In0.FBo4JLki553yWWxgMRh8oMfDEaCrA8mbVTX2D8hDq0o`
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDQ1NDc4NjcsImlhdCI6MTcwMTk1NTg2Nywicm9sZSI6InVzZXIiLCJzdWIiOiI1ODE4In0.aKVEVqgGqvjaHDPNZWpKeRJ_q6F3wO3yTqWuMa8jcC8`
 // const config = {
 //
 //     method: 'post',
@@ -38,8 +38,42 @@ const getTemplates = async () => {
         method: 'get',
         maxBodyLength: Infinity,
         url: 'https://notify.eskiz.uz/api/template/',
-       headers: {
+        headers: {
             'Authorization': `Bearer ${token}`
+        }
+    }
+    return await axios(config)
+}
+const sendSms = async () => {
+    const config = {
+
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://notify.eskiz.uz/api/message/sms/send',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        data: {
+            mobile_phone: '998917812324',
+            message: 'Ваш код верификации RepostUZ - 123456',
+            from: '4546'
+        }
+    }
+    return await axios(config)
+}
+const getTotals = async () => {
+    const config = {
+
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://notify.eskiz.uz/api/user/totals',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        data: {
+            year: 2023,
+            month: 12,
+            is_global: 0
         }
     }
     return await axios(config)
@@ -48,8 +82,8 @@ const main = async () => {
     try {
         // const tokenResponse = await getToken()
         // console.log(tokenResponse)
-        const templateData = await getTemplates()
-        console.log(templateData)
+        const data = await getTotals()
+        console.log(data)
     } catch (e) {
         console.log('erorr', e)
     }

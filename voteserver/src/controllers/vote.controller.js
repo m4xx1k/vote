@@ -1,5 +1,6 @@
 const ApiError = require('../errors/api.error');
 const voteService = require('../services/vote.service')
+
 class voteController {
     async check(req, res, next) {
         try {
@@ -21,6 +22,16 @@ class voteController {
             const {nomination, candidate, tg_id, type} = req.body
             const votes = await voteService.vote({nomination, candidate, tg_id, type});
             return res.json(votes);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async status(req, res, next) {
+        try {
+            const data = req.body
+            console.log('sms', {data})
+            return res.json({});
         } catch (e) {
             next(e);
         }
