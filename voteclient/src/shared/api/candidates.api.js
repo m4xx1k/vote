@@ -28,6 +28,18 @@ export const fetchCandidatesByNomination = async (id) => {
     }
 }
 
+export const serverFetchCandidatesByNomination = async (id) => {
+    try {
+        const response = await fetch(`https://api.repostuz.pp.ua/candidate/candidatesByNomination/${id}`, {
+            cache: 'no-store'
+        })
+        return response.json()
+    } catch (e) {
+        console.log(e)
+        return e.message
+    }
+}
+
 export const findUserVote = async (params) => {
     try {
         const response = await api.get(`vote/`, {params})

@@ -2,7 +2,7 @@ import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import {photo} from "../../../../../shared/utils/candidate.utils";
-import {fetchCandidatesByNomination} from "../../../../../shared/api/candidates.api";
+import { serverFetchCandidatesByNomination} from "../../../../../shared/api/candidates.api";
 
 const imgStyle = {
     width: 94,
@@ -15,7 +15,7 @@ const imgStyle = {
     borderRadius: '50%'
 }
 const Page = async ({params: {id, lang}, searchParams}) => {
-    const candidates = await fetchCandidatesByNomination(id)
+    const candidates = await serverFetchCandidatesByNomination(id)
 
     return (
         <>

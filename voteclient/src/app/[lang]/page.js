@@ -20,7 +20,7 @@ export default async function Home({params: {lang}}) {
                                 <Image width={157} height={24} quality={100} src={Logo.src} alt="LOGO"/>
                             </Link>
                             <h1 className="hero__title title">{main.title}</h1>
-                            <div className="hero__text text text_big">
+                            <div className="hero__text text text_big hero__text-description">
                                 <p>
                                     {main.description}
                                 </p>
