@@ -3,5 +3,6 @@ export const photo = (name) => {
         return name
     }
     return `https://api.repostuz.pp.ua/${name}`
+    // return `https://api.repostuz.pp.ua/${name}`
     // return name
 }

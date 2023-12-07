@@ -15,7 +15,8 @@ const Page = ({params: {id, lang}}) => {
     const [isVoting, setIsVoting] = useState(false)
     const {user} = useTelegram()
     const {data: candidate, isLoading, error, mutate: mutateCandidate} = useSWR(id, () => getCandidateWithRating(id))
-    const {data: vote, isLoadingVote, errorVote, mutate} = useSWR('vote', () => findUserVote({
+    console.log({candidate})
+    const {data: vote, mutate} = useSWR('vote', () => findUserVote({
         tg_id: user.id,
         candidate: id
     }))
@@ -25,8 +26,9 @@ const Page = ({params: {id, lang}}) => {
     }, [lang])
 
     const type = vote?.length && vote ? vote[0].type : null
-    const strokeDashoffsetFor = getRatingCircleStroke(candidate ? candidate?.rating : 0)
-    const strokeDashoffsetAgainst = getRatingCircleStroke(candidate ? 100 - candidate?.rating : 0)
+    const strokeDashoffsetFor = getRatingCircleStroke(candidate ? candidate?.for.percent : 0)
+    const strokeDashoffsetAgainst = getRatingCircleStroke(candidate ? candidate?.against.percent : 0)
+    const neutral = candidate?.neutral ? candidate.neutral.toFixed(0) : 0
     const handleVote = async (voteType) => {
         if (type !== voteType) {
             setIsVoting(true)
@@ -35,9 +37,7 @@ const Page = ({params: {id, lang}}) => {
             await mutate()
         }
     }
-    const neutral = candidate?.neutral ? candidate.neutral.toFixed(0) : 0
-    if (isLoading || error || !candidate || !content) return null
-
+    if (isLoading || error || !candidate || !Object.keys(content).length) return null
     if (isVoting) return <Voted setIsVoting={setIsVoting}/>
 
     return (<main className="page">
@@ -60,17 +60,6 @@ const Page = ({params: {id, lang}}) => {
                         </div>
                         <h2 className={"minister__maintitle title"}>{candidate[lang].name}</h2>
                         <div className="minister__text text">{candidate[lang].description}</div>
-                        {/*<div className={'max-w-sm'}>*/}
-                        {/*    {JSON.stringify({candidate, error})}*/}
-                        {/*</div>*/}
-                        {/*<div data-circle className="minister__circle">*/}
-                        {/*    <svg>*/}
-                        {/*        <circle cx="47" cy="47" r="47"></circle>*/}
-                        {/*        <circle style={{strokeDashoffset}} data-circle-round cx="47" cy="47" r="47"></circle>*/}
-                        {/*    </svg>*/}
-                        {/*    <div style={{fontSize: 20}} className="minister__circle-percentage"*/}
-                        {/*         data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>*/}
-                        {/*</div>*/}
 
 
                         <div className="minister__circles">
@@ -81,7 +70,7 @@ const Page = ({params: {id, lang}}) => {
                                             cy="47" r="47"></circle>
                                 </svg>
                                 <div className="minister__circle-percentage"
-                                     data-symbol="%">{(candidate?.rating || 0).toFixed(0)}</div>
+                                     data-symbol="%">{candidate?.for.percent}</div>
                             </div>
                             <div data-circle className="minister__circle minister__circle_red">
                                 <svg>
@@ -90,7 +79,7 @@ const Page = ({params: {id, lang}}) => {
                                             cx="47" cy="47" r="47"></circle>
                                 </svg>
                                 <div className="minister__circle-percentage"
-                                     data-symbol="%">{(candidate?.rating ? 100 - candidate.rating : 0).toFixed(0)}</div>
+                                     data-symbol="%">{candidate?.against.percent}</div>
                             </div>
                         </div>
 
@@ -102,8 +91,8 @@ const Page = ({params: {id, lang}}) => {
                                 className="progres__text">{neutral}</span></span>
                             </div>
                             <div className="progres__bottom">
-                                <span>0</span>
-                                <span>100%</span>
+                                <span>{neutral > 10 && 0}</span>
+                                {neutral < 85 && <span> 100 %</span>}
                             </div>
                         </div>
                         <div className="minister__info">
@@ -138,14 +127,14 @@ const Page = ({params: {id, lang}}) => {
     );
 };
 
-
 const getRatingCircleStroke = (rating) => {
-    let value = rating
-    if (!rating) value = 0
+    if (rating === undefined || rating === null) {
+        rating = 0;
+    }
+
     const minValue = 297;
     const maxValue = 0;
-    const interpolatedValue = minValue + (maxValue - minValue) * (value / 100);
+    const interpolatedValue = minValue - (minValue - maxValue) * (rating / 100);
     return Math.round(interpolatedValue);
-}
-
+};
 export default Page;
