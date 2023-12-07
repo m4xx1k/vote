@@ -1,6 +1,7 @@
 require('dotenv').config()
 const axios = require("axios");
 const cache = require('../cache')
+const ENV = require('../config')
 
 function formatPhone(phoneNumberString) {
     let mobile_phone = phoneNumberString
@@ -20,8 +21,8 @@ class userService {
 
     async getAndSaveSmsToken() {
         try {
-            const email = process.env.ESKIZ_SMS_EMAIL
-            const password = process.env.ESKIZ_SMS_PASSWORD
+            const email = ENV.ESKIZ_SMS_EMAIL
+            const password = ENV.ESKIZ_SMS_PASSWORD
             console.log({email, password})
             const config = {
 
@@ -31,7 +32,7 @@ class userService {
                 data: {email, password}
             };
             const response = await axios(config)
-            console.log('token data',JSON.stringify(response.data, null, 4))
+            console.log('token data', JSON.stringify(response.data, null, 4))
             const token = response.data?.data?.token
             if (token) {
                 cache.del('token')
@@ -49,8 +50,8 @@ class userService {
         if (!token) {
             token = await this.getAndSaveSmsToken()
         }
-        if(token===null){
-            return {data:'No token'}
+        if (token === null) {
+            return {data: 'No token'}
         }
         const config = {
 
@@ -76,9 +77,10 @@ class userService {
             if (!token) {
                 token = await this.getAndSaveSmsToken()
             }
-            if(token===null){
-                return {data:'No token'}
-            }    const config = {
+            if (token === null) {
+                return {data: 'No token'}
+            }
+            const config = {
 
                 method: 'post',
                 maxBodyLength: Infinity,
@@ -105,7 +107,7 @@ class userService {
     async sendSms({phone, code}) {
         let result
 
-        const {uz,mobile_phone} = formatPhone(phone)
+        const {uz, mobile_phone} = formatPhone(phone)
         if (uz) {
             result = await this.sendUzbekSms({mobile_phone, code})
             console.log({uz, result: result.data})
@@ -113,7 +115,7 @@ class userService {
             result = await this.sendSmsGlobal({mobile_phone, code})
             console.log({uz, result: result.data})
         }
-        return {uz,mobile_phone}
+        return {uz, mobile_phone}
     }
 
 }
