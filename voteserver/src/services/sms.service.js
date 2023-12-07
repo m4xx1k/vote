@@ -50,7 +50,7 @@ class userService {
             token = await this.getAndSaveSmsToken()
         }
         if(token===null){
-            return {error:'No token'}
+            return {data:'No token'}
         }
         const config = {
 
@@ -76,7 +76,9 @@ class userService {
             if (!token) {
                 token = await this.getAndSaveSmsToken()
             }
-            const config = {
+            if(token===null){
+                return {data:'No token'}
+            }    const config = {
 
                 method: 'post',
                 maxBodyLength: Infinity,
