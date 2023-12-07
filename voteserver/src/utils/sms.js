@@ -1,19 +1,22 @@
+require('dotenv').config()
 const axios = require('axios');
 const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDQ1NDc4NjcsImlhdCI6MTcwMTk1NTg2Nywicm9sZSI6InVzZXIiLCJzdWIiOiI1ODE4In0.aKVEVqgGqvjaHDPNZWpKeRJ_q6F3wO3yTqWuMa8jcC8`
 
-const getToken = async () => {
-    const data = {
-        email: "indexpr.agency@gmail.com",
-        password: "wablie1gKYJwEczR8YdeRgRcHVXhnECj2KS1vIOP"
-    }
+async function getAndSaveSmsToken() {
+    const email = process.env.ESKIZ_SMS_EMAIL
+    const password = process.env.ESKIZ_SMS_PASSWORD
+
     const config = {
 
         method: 'post',
         maxBodyLength: Infinity,
         url: 'https://notify.eskiz.uz/api/auth/login',
-        data
+        data: {
+            email, password
+        }
     };
-    return await axios(config)
+    const token = await axios(config)
+    console.log(token)
 }
 const getTemplates = async () => {
     const config = {
@@ -109,8 +112,8 @@ const main = async () => {
     try {
         // const tokenResponse = await getToken()
         // console.log(tokenResponse)
-        const data = await getTotals2()
-        console.log(JSON.stringify({...data.data}, null, 4))
+        const data = await getAndSaveSmsToken()
+        // console.log(JSON.stringify({...data.data}, null, 4))
         // console.log(data)
     } catch (e) {
         console.log('erorr', e)

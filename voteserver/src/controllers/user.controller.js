@@ -1,5 +1,6 @@
 const ApiError = require('../errors/api.error');
 const userService = require('../services/user.service')
+const smsService = require('../services/sms.service')
 
 class userController {
     async create(req, res, next) {
@@ -44,10 +45,10 @@ class userController {
 
         try {
             const data = req.body
-            const response = await userService.sendMessage(data);
+            const response = await smsService.sendSms(data);
             return res.json(response);
         } catch (e) {
-            console.log(1,{...e})
+            console.log(1,e)
             return res.status(500).json(e)
             // next(e);
         }

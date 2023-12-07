@@ -1,5 +1,6 @@
 const User = require('../mongo/user.model')
 const axios = require("axios");
+const cache = require('../cache')
 
 class userService {
     async create({ip, tg_id, username, phone}) {
@@ -29,26 +30,84 @@ class userService {
         }
         console.log({req})
         const users = await User.find(req);
-
         return users;
     }
 
     async getAndSaveSmsToken() {
-        const data = {
-            email: "indexpr.agency@gmail.com",
-            password: "wablie1gKYJwEczR8YdeRgRcHVXhnECj2KS1vIOP"
+        try {
+            const email = process.env.ESKIZ_SMS_EMAIL
+            const password = process.env.ESKIZ_SMS_PASSWORD
+            const config = {
+
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://notify.eskiz.uz/api/auth/login',
+                data: {email, password}
+            };
+            const response = await axios(config)
+            const token = response.data?.data?.token
+            if (token) {
+                cache.del('token')
+                cache.set('token', token, 24 * 60 * 60)
+                return token
+            }
+        } catch (e) {
+            console.log(e)
+            return null
         }
+    }
+
+    async sendUzbekSms({token, mobile_phone, code}) {
         const config = {
 
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://notify.eskiz.uz/api/auth/login',
-            data
-        };
-        const token =  await axios(config)
+            url: 'https://notify.eskiz.uz/api/message/sms/send',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            data: {
+                mobile_phone,
+                message: `Sizning RepostUZ tasdiqlash kodingiz - ${code}`,
+                from: '4546',
+                callback_url: 'https://api.repostuz.pp.ua/vote/status'
+            }
+        }
+        return await axios(config)
     }
 
-    async sendSms({}) {
+    async sendSmsGlobal({token, code, mobile_phone}) {
+        try {
+            const config = {
+
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://notify.eskiz.uz/api/message/sms/send-global',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                data: {
+                    mobile_phone,
+                    message: `Ваш код верификации RepostUZ - ${code}`,
+                    // from: '4546',
+                    country_code: 'UA',
+                    callback_url: 'https://api.repostuz.pp.ua/vote/status',
+                    unicode: '0'
+                }
+            }
+            return await axios(config)
+        } catch (e) {
+            console.log(JSON.stringify(e, null, 4))
+        }
+
+    }
+
+    async sendSms({mobile_phone, code}) {
+        let token = cache.get('token')
+        if (!token) {
+            token = await this.getAndSaveSmsToken()
+        }
+
 
     }
 
