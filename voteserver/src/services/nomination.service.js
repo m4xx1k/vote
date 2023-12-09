@@ -1,6 +1,5 @@
 const Nomination = require('../mongo/nomination.model');
 const Vote = require('../mongo/vote.model');
-const VoteNeutral = require('../mongo/vote-neutral.model');
 const candidateService = require('./candidate.service')
 
 class nominationService {
@@ -12,9 +11,7 @@ class nominationService {
     async findAll() {
         const nominations = await Nomination.find({}).sort({order: 1}).lean();
         for (let i = 0; i < nominations.length; i++) {
-            const votes = await Vote.countDocuments({nomination: nominations[i]._id})
-            const votesNeutral = await VoteNeutral.countDocuments({nomination: nominations[i]._id})
-            nominations[i].votes = votes + votesNeutral
+            nominations[i].votes = await Vote.countDocuments({nomination: nominations[i]._id})
         }
         return nominations
     }
@@ -32,7 +29,6 @@ class nominationService {
     }
 
     async update(id, data) {
-        console.log({id, data})
         return await Nomination.findByIdAndUpdate(id, data);
     }
 

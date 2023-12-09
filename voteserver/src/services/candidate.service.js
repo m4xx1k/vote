@@ -1,13 +1,11 @@
 const Candidate = require('../mongo/candidate.model');
 const Vote = require('../mongo/vote.model');
-const VoteNeutral = require('../mongo/vote-neutral.model');
 const path = require("path");
 const fs = require("fs");
 
 class candidateService {
     async create({name, photo, nomination, ru, uz, order}) {
-        const candidate = await Candidate.create({name, photo, nomination, ru, uz, order: order || 0});
-        return candidate
+        return await Candidate.create({name, photo, nomination, ru, uz, order: order || 0})
     }
 
     async findAll() {
@@ -32,19 +30,10 @@ class candidateService {
                     votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
                     votesAgainstPercent = 100 - votesForPercent
                 }
-                const neutralVotesInNomination = await VoteNeutral.countDocuments({nomination: candidate.nomination})
-                const neutralVotesForCandidate = await VoteNeutral.countDocuments({candidate: candidate._id})
-                let neutral = 0
-                if (neutralVotesInNomination !== 0 && !Number.isNaN(neutralVotesForCandidate)) {
-                    neutral = (neutralVotesForCandidate / neutralVotesInNomination) * 100
-                }
+
                 votedCandidates.push({
                     ...candidate,
                     rating,
-                    neutral: {
-                        percent: neutral,
-                        count: neutralVotesForCandidate
-                    },
                     for: {
                         count: votesForCount,
                         percent: votesForPercent
@@ -109,25 +98,9 @@ class candidateService {
             votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
             votesAgainstPercent = 100 - votesForPercent
         }
-        const neutralVotesInNomination = await VoteNeutral.countDocuments({nomination: candidate.nomination})
-        const neutralVotesForCandidate = await VoteNeutral.countDocuments({candidate: candidateId})
-        let neutral = 0
-        if (neutralVotesInNomination !== 0 && !Number.isNaN(neutralVotesForCandidate)) {
-            neutral = (neutralVotesForCandidate / neutralVotesInNomination) * 100
-        }
-        console.log({
-            for: {
-                count: votesForCount,
-                percent: votesForPercent
-            },
-            against: {
-                count: votesAgainstCount, percent: votesAgainstPercent
-            },
-        })
         return {
             ...candidate,
             rating,
-            neutral,
             for: {
                 count: votesForCount,
                 percent: votesForPercent
@@ -143,7 +116,6 @@ class candidateService {
 
         const votesFor = await Vote.countDocuments({type: 'for', candidate: candidate._id})
         const votesAgainst = await Vote.countDocuments({type: 'against', candidate: candidate._id})
-        console.log({votesFor, votesAgainst})
         return {...candidate, for: votesFor, against: votesAgainst}
     }
 
