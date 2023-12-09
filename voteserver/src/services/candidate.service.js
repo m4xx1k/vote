@@ -32,15 +32,16 @@ class candidateService {
                     votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
                     votesAgainstPercent = 100 - votesForPercent
                 }
-                // const neutralVotesInNomination = await VoteNeutral.countDocuments({nomination: candidate.nomination})
-                // const neutralVotesForCandidate = await VoteNeutral.countDocuments({candidate: candidate._id})
-                // let neutral = 0
-                // if (neutralVotesInNomination !== 0 && !Number.isNaN(neutralVotesForCandidate)) {
-                //     neutral = (neutralVotesForCandidate / neutralVotesInNomination) * 100
-                // }
+                const neutralVotesInNomination = await VoteNeutral.countDocuments({nomination: candidate.nomination})
+                const neutralVotesForCandidate = await VoteNeutral.countDocuments({candidate: candidate._id})
+                let neutral = 0
+                if (neutralVotesInNomination !== 0 && !Number.isNaN(neutralVotesForCandidate)) {
+                    neutral = (neutralVotesForCandidate / neutralVotesInNomination) * 100
+                }
                 votedCandidates.push({
                     ...candidate,
                     rating,
+                    neutral,
                     for: {
                         count: votesForCount,
                         percent: votesForPercent
