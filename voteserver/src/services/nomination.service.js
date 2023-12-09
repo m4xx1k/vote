@@ -1,13 +1,21 @@
 const Nomination = require('../mongo/nomination.model');
+const Vote = require('../mongo/vote.model');
+const VoteNeutral = require('../mongo/vote-neutral.model');
 
 class nominationService {
     async create({ru, uz}) {
-        const nominations = await this.findAll()
-        return await Nomination.create({ru, uz, order: nominations.length + 1})
+        const nominationLength = await Nomination.countDocuments()
+        return await Nomination.create({ru, uz, order: nominationLength + 1})
     }
 
     async findAll() {
-        return await Nomination.find({}).sort({order: 1}).lean();
+        const nominations = await Nomination.find({}).sort({order: 1}).lean();
+        for (let i = 0; i < nominations.length; i++) {
+            const votes = await Vote.countDocuments({nomination: nominations[i]._id})
+            const votesNeutral = await VoteNeutral.countDocuments({nomination: nominations[i]._id})
+            nominations[i].votes = votes + votesNeutral
+        }
+        return nominations
     }
 
     async findById(id) {
@@ -25,12 +33,12 @@ class nominationService {
     }
 
 
-    async updateOrder({ id, sourceOrder, destinationOrder }) {
+    async updateOrder({id, sourceOrder, destinationOrder}) {
         const session = await Nomination.startSession();
 
         try {
             await session.withTransaction(async () => {
-                const nominationToUpdate = await Nomination.findByIdAndUpdate(id, { order: destinationOrder + 999_999 }); // fakeUpdatedNomination to avoid duplicates
+                const nominationToUpdate = await Nomination.findByIdAndUpdate(id, {order: destinationOrder + 999_999}); // fakeUpdatedNomination to avoid duplicates
 
                 const nominationsToUpdate = await Nomination.find({
                     order: {
@@ -54,9 +62,9 @@ class nominationService {
             await session.endSession();
         }
 
-        const updatedNomination = await Nomination.findByIdAndUpdate(id, { order: destinationOrder });
+        const updatedNomination = await Nomination.findByIdAndUpdate(id, {order: destinationOrder});
 
-        return { is: !!updatedNomination, updatedNomination };
+        return {is: !!updatedNomination, updatedNomination};
     }
 
 
