@@ -28,7 +28,7 @@ class candidateService {
                 const rating = votesForCount - votesAgainstCount
                 let votesForPercent = 0
                 let votesAgainstPercent = 0
-                if(votesForCount || votesAgainstCount) {
+                if (votesForCount || votesAgainstCount) {
                     votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
                     votesAgainstPercent = 100 - votesForPercent
                 }
@@ -41,7 +41,10 @@ class candidateService {
                 votedCandidates.push({
                     ...candidate,
                     rating,
-                    neutral,
+                    neutral: {
+                        percent: neutral,
+                        count: neutralVotesForCandidate
+                    },
                     for: {
                         count: votesForCount,
                         percent: votesForPercent
@@ -102,7 +105,7 @@ class candidateService {
         const rating = votesForCount - votesAgainstCount
         let votesForPercent = 0
         let votesAgainstPercent = 0
-        if(votesForCount || votesAgainstCount) {
+        if (votesForCount || votesAgainstCount) {
             votesForPercent = Math.round((votesForCount / (votesForCount + votesAgainstCount)) * 100)
             votesAgainstPercent = 100 - votesForPercent
         }
