@@ -53,6 +53,18 @@ class userController {
             // next(e);
         }
     }
+    async delete(req, res, next) {
+
+        try {
+            const data = req.body
+            const response = await userService.delete(data);
+            return res.json(response);
+        } catch (e) {
+            console.log(1,'sendMessage')
+            return res.status(500).json(e)
+            // next(e);
+        }
+    }
 
 
 }

@@ -1,4 +1,5 @@
 const User = require('../mongo/user.model')
+const Vote = require('../mongo/vote.model')
 
 class userService {
     async create({ip, tg_id, username, phone}) {
@@ -31,6 +32,11 @@ class userService {
         return users;
     }
 
+    async delete(filter) {
+        const user = await User.findOneAndDelete(filter).lean()
+        const deletedVotes = await Vote.deleteMany({user: user._id}).lean()
+        return {user, votesCount: deletedVotes.length, deletedVotes}
+    }
 
 }
 
