@@ -36,7 +36,7 @@ module.exports = new Scenes.WizardScene(
     async (ctx) => {
         try {
             const usersCode = Number(ctx.message.text)
-            const {verificationCode, sendCodeTime, ip, id, phone} = ctx.session
+            const {verificationCode, sendCodeTime, id, phone} = ctx.session
             const isCorrect = usersCode === verificationCode
             const now = new Date().getTime()
 
@@ -50,7 +50,7 @@ module.exports = new Scenes.WizardScene(
                 }
             }
             const user = await userService.create({
-                ip, id, phone, username: ctx.from?.username || ''
+                ip: '_', id, phone, username: ctx.from?.username || ''
             })
 
             // if (user)

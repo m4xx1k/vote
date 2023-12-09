@@ -10,7 +10,7 @@ const schema = new db.Schema({
     },
     ip: {
         type: String,
-        required: true
+        default: ''
     },
     username: {
         type: String,

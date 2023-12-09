@@ -11,8 +11,8 @@ scene.enter(async (ctx) => {
                 {
                     ...Markup.inlineKeyboard(
                         [
-                            Markup.button.callback('ru', 'ru'),
-                            Markup.button.callback('uz', 'uz')
+                            Markup.button.callback('Русский', 'ru'),
+                            Markup.button.callback('Узбекча', 'uz')
                         ],
                     )
                 }
@@ -28,7 +28,7 @@ scene.action('ru', async (ctx) => {
     await ctx.i18n.setLocale('ru');
     const {isRegistration, previousScene} = ctx.session
     if (isRegistration) {
-        await ctx.scene.enter('ip')
+        await ctx.scene.enter('contact')
         ctx.session.isRegistration = false
     } else {
         await ctx.scene.enter(previousScene ? previousScene : 'web')
@@ -39,7 +39,7 @@ scene.action('uz', async (ctx) => {
     await ctx.i18n.setLocale('uz');
     const {isRegistration, previousScene} = ctx.session
     if (isRegistration) {
-        await ctx.scene.enter('ip')
+        await ctx.scene.enter('contact')
         ctx.session.isRegistration = false
     } else {
         await ctx.scene.enter(previousScene ? previousScene : 'web')
