@@ -27,6 +27,16 @@ class nominationController {
         }
     }
 
+    async findAllWithCandidates(req, res, next) {
+        try {
+            const nominations = await nominationService.findAllWithCandidates();
+            console.log(nominations)
+            return res.json(nominations);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async findById(req, res, next) {
         try {
             const nomination = await nominationService.findById(req.params.id);

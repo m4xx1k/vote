@@ -1,6 +1,7 @@
 const Nomination = require('../mongo/nomination.model');
 const Vote = require('../mongo/vote.model');
 const VoteNeutral = require('../mongo/vote-neutral.model');
+const candidateService = require('./candidate.service')
 
 class nominationService {
     async create({ru, uz}) {
@@ -16,6 +17,14 @@ class nominationService {
             nominations[i].votes = votes + votesNeutral
         }
         return nominations
+    }
+
+    async findAllWithCandidates() {
+        const nominations = await this.findAll();
+        const candidatesPromises = nominations.map(({_id}) => candidateService.candidateByNomination({id: _id}))
+        const candidates = await Promise.all(candidatesPromises)
+
+        return nominations.map((nomination, i) => ({...nomination, candidates: candidates[i]}))
     }
 
     async findById(id) {
