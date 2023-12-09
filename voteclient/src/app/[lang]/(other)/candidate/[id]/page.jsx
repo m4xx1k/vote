@@ -38,7 +38,7 @@ const Page = ({params: {id, lang}}) => {
         }
     }
     if (isLoading || error || !candidate || !Object.keys(content).length) return null
-    if (isVoting) return <Voted setIsVoting={setIsVoting}/>
+    if (isVoting) return <Voted content={content} setIsVoting={setIsVoting}/>
 
     return (<main className="page">
 
@@ -95,12 +95,12 @@ const Page = ({params: {id, lang}}) => {
                                 {neutral < 85 && <span> 100 %</span>}
                             </div>
                         </div>
-                        <div className="minister__info">
-                            <div className="minister__title-2">{content.info_title}:</div>
-                            <div className="minister__text text text_big">
-                                {content.info_text}
-                            </div>
-                        </div>
+                        {/*<div className="minister__info">*/}
+                        {/*    <div className="minister__title-2">{content.info_title}:</div>*/}
+                        {/*    <div className="minister__text text text_big">*/}
+                        {/*        {content.info_text}*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
 
                         <div className="minister__title-1">{content.vote.title}:</div>
 
