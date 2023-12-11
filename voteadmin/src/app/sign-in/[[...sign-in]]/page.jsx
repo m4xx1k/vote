@@ -5,6 +5,7 @@ export default function Page() {
         appearance={{
             elements: {
                 rootBox: 'mx-auto mt-16',
+                footerAction__signIn:'hidden'
             }
         }}
         signUpUrl={'/sign-in'}

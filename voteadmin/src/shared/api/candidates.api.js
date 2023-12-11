@@ -23,7 +23,7 @@ export const fetchCandidatesNames = async id => {
 }
 export const fetchOneCandidate = async id => {
     try {
-        const response = await api.get(`/candidate/${id}`)
+        const response = await api.get(`/candidate/rating/${id}`)
         console.log(response.data)
         return response.data
     } catch (e) {
