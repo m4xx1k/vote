@@ -36,7 +36,8 @@ module.exports = new Scenes.WizardScene(
     async (ctx) => {
         try {
             const usersCode = Number(ctx.message.text)
-            const {verificationCode, sendCodeTime, id, phone} = ctx.session
+            const {verificationCode, sendCodeTime, phone} = ctx.session
+            const id = ctx.from.id
             const isCorrect = usersCode === verificationCode
             const now = new Date().getTime()
 
