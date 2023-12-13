@@ -5,10 +5,13 @@ const {generateVerificationCode, sendVerificationCode} = require("../../utils");
 
 module.exports = new Scenes.WizardScene(
     'contact',
+
     async (ctx) => {
-        await ctx.replyWithHTML(ctx.t('share_contact_text'),
+        await ctx.replyWithHTML(
+            ctx.t('share_contact_text'),
             Markup.keyboard([Markup.button.contactRequest(ctx.t('share_contact_button'))]).oneTime()
         )
+
         return ctx.wizard.next()
     },
     async (ctx) => {
@@ -25,7 +28,7 @@ module.exports = new Scenes.WizardScene(
             ctx.session.sendCodeTime = new Date().getTime()
 
             const smsResult = await userService.sendSms(phone_number, verificationCode)
-            console.log({smsResult})
+            console.log({smsResult, verificationCode})
             await ctx.reply(`${ctx.t('code_sent_text')}`)
 
             return ctx.wizard.next()
@@ -35,10 +38,12 @@ module.exports = new Scenes.WizardScene(
     },
     async (ctx) => {
         try {
+
             const usersCode = Number(ctx.message.text)
             const {verificationCode, sendCodeTime, phone} = ctx.session
             const id = ctx.from.id
             const isCorrect = usersCode === verificationCode
+
             const now = new Date().getTime()
 
             if (!isCorrect) {
@@ -54,10 +59,6 @@ module.exports = new Scenes.WizardScene(
                 ip: '_', id, phone, username: ctx.from?.username || ''
             })
 
-            // if (user)
-            //     await ctx.replyWithHTML(`🎉\nВот твой профиль в базе данных:\n\n${JSON.stringify(user, null, 4)}`)
-            // else
-            //     await ctx.replyWithHTML(`бля тьі вже зареган_а пхд`)
 
             await ctx.scene.enter('web')
 
