@@ -15,28 +15,26 @@ const LocalSession = require('telegraf-session-local')
 
 const {BOT_TOKEN} = process.env//const's
 
-const main = async () => {
-    const bot = new Telegraf(BOT_TOKEN)
-    const sessions = new LocalSession({database: 'session.json'})
-    bot.use(sessions.middleware())
+const bot = new Telegraf(BOT_TOKEN)
+const sessions = new LocalSession({database: 'session.json'})
+bot.use(sessions.middleware())
 
-    const i18n = new I18n({
-        useSession: true,
-        defaultLocale: "ru",
-        directory: "src/locales",
+const i18n = new I18n({
+    useSession: true,
+    defaultLocale: "ru",
+    directory: "src/locales",
 
 
-    });
-    bot.use(i18n);
+});
+bot.use(i18n);
 
-    const stage = new Scenes.Stage([languageScene, ipScene, contactScene, candidateScene, nominationScene, nominationsScene,webScene])
+const stage = new Scenes.Stage([languageScene, ipScene, contactScene, candidateScene, nominationScene, nominationsScene, webScene])
 
-    bot.use(stage.middleware())
+bot.use(stage.middleware())
 
-    bot.use(startComposer.middleware())
+bot.use(startComposer.middleware())
 
-    bot.use(previousSceneMiddleware)
-    await bot.launch()
-
-}
-main().then(() => console.log(`bot started`))
+bot.use(previousSceneMiddleware)
+bot.launch()
+process.once('sigint', () => bot.stop('sigint'));
+process.once('sigterm', () => bot.stop('sigterm'));
