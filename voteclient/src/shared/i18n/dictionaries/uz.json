@@ -15,9 +15,9 @@
       "vote": {
         "title": "Ovoz berish",
         "neutral_title": "Neytral ovoz berdi:",
-        "for": "Orqada",
+        "for": "Xa",
         "neutral": "Neytral",
-        "against": "Qarshi",
+        "against": "Yo'q",
         "done_title": "Sizning ovozingiz qabul qilindi!",
         "done_description": "Ovoz berganingiz uchun tashakkur",
         "continue": "Davom eting"
