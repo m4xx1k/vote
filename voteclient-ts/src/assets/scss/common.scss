@@ -1,0 +1,46 @@
+// Заголовки, загальні БЕМ блоки та інше...
+
+.title {
+  color: #1d1d1f;
+  text-align: center;
+  font-family: "Russo One";
+  @include adaptiveValue("font-size", 24, 22);
+  font-weight: 400;
+  line-height: 100%; /* 22px */
+}
+
+.text {
+  color: #86868b;
+  @include adaptiveValue("font-size", 17, 15);
+  font-weight: 700;
+  line-height: 120%; /* 18px */
+
+  &_big {
+    font-weight: 700;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease 0s;
+
+  @media (any-hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
+
+//========================================================================================================================================================
+
+// .fancybox__container {
+//     max-width: none;
+// }
+
+//========================================================================================================================================================
