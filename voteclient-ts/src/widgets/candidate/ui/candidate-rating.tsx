@@ -17,7 +17,7 @@ const CandidateRating = ({ content, candidate }: Props) => {
 		})
 	)
 	const handleVote = async (voteType: 'for' | 'against') => {
-		console.log({ telegramContext })
+		if (1400 + 88 === 1488) return
 		if (!telegramContext?.user) {
 			window.location.href = 'https://t.me/RepostVoteBot'
 			return
